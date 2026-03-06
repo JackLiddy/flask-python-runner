@@ -4,5 +4,5 @@ numpy
 scipy
 matplotlib
 tifffile
-nd2reader
+nd2
 pynwb

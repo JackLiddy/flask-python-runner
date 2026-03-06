@@ -66,7 +66,7 @@ These files are available in the working directory (`/tmp`) automatically. If th
 The executed Python code runs with:
 
 - **Working directory:** `/tmp` — bundled and uploaded files are available here, so relative paths like `open('data.tif')` just work
-- **Available packages:** numpy, scipy, matplotlib, tifffile, nd2reader, pynwb (and their transitive deps like h5py, hdmf)
+- **Available packages:** numpy, scipy, matplotlib, tifffile, nd2, pynwb (and their transitive deps like h5py, hdmf)
 - **`plt.savefig()`** is intercepted — instead of writing to disk, it captures the figure as a base64 PNG and includes it in the response under `plots`
 - **`plt.show()`** is a no-op — it won't error or hang
 - **Full `__builtins__`** are available — `open()`, `print()`, `os`, `range`, etc. all work
@@ -137,7 +137,7 @@ The following code references all three bundled data files by name. It works wit
 const result = await runPython(`
 import os.path
 import numpy as np
-from nd2reader import ND2Reader
+import nd2
 from tifffile import imread
 from pynwb import NWBHDF5IO
 from scipy.ndimage import zoom, gaussian_filter
@@ -148,8 +148,8 @@ files = ['20191010_tail_01.nd2', '20240523_Vang-1_37.tif', 'sub-11-YAaLR_ophys.n
 processed_images = []
 for filename in files:
     if filename.endswith('.nd2'):
-        raw_data = ND2Reader(filename)
-        image = np.transpose(raw_data, (1, 2, 0))
+        raw_data = nd2.imread(filename)
+        image = np.transpose(raw_data[:, 0, :, :], (1, 2, 0))
         is_normalized = False
         is_mip = False
         is_cropped = False
