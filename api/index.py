@@ -1,5 +1,6 @@
 import io
 import os
+os.environ.setdefault('XDG_CACHE_HOME', '/tmp/.cache')
 import shutil
 import base64
 import contextlib
