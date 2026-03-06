@@ -12,6 +12,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+# Save the real savefig/show once at import time
+_original_savefig = plt.savefig
+_original_show = plt.show
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -23,12 +27,11 @@ def _capture_savefig(saved_plots: dict):
     instead of writing to disk. The key is the stringified fname argument so
     the calling code's filename logic is preserved.
     """
-    original = plt.savefig
-
     def patched_savefig(fname, *args, **kwargs):
         buf = io.BytesIO()
         kwargs.pop('format', None)          # force PNG
-        original(buf, *args, format='png', bbox_inches='tight', **kwargs)
+        kwargs.pop('bbox_inches', None)
+        _original_savefig(buf, *args, format='png', bbox_inches='tight', **kwargs)
         plt.close('all')
         key = str(fname)
         saved_plots[key] = (
