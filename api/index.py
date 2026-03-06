@@ -45,7 +45,7 @@ def _capture_savefig(saved_plots: dict):
 def _save_uploads_to_tmp(files) -> dict:
     """Write uploaded files to /tmp and return {original_filename: tmp_path}."""
     saved = {}
-    for name, file_obj in files.items():
+    for name, file_obj in files.items(multi=True):
         tmp_path = os.path.join('/tmp', file_obj.filename)
         file_obj.save(tmp_path)
         saved[file_obj.filename] = tmp_path
