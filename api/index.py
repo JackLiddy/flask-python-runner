@@ -10,8 +10,10 @@ matplotlib.use('Agg')  # Must be before any other matplotlib import
 import matplotlib.pyplot as plt
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Copy bundled data files to /tmp on startup so user code can reference them
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
