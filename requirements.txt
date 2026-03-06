@@ -1,0 +1,7 @@
+flask
+numpy
+scipy
+matplotlib
+tifffile
+nd2reader
+pynwb
