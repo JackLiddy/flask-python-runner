@@ -1,5 +1,6 @@
 import io
 import os
+import shutil
 import base64
 import contextlib
 import traceback
@@ -11,6 +12,15 @@ import matplotlib.pyplot as plt
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+
+# Copy bundled data files to /tmp on startup so user code can reference them
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
+if os.path.isdir(DATA_DIR):
+    for fname in os.listdir(DATA_DIR):
+        src = os.path.join(DATA_DIR, fname)
+        dst = os.path.join('/tmp', fname)
+        if os.path.isfile(src) and not os.path.exists(dst):
+            shutil.copy2(src, dst)
 
 # Save the real savefig/show once at import time
 _original_savefig = plt.savefig
